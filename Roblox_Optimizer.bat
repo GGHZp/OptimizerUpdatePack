@@ -909,7 +909,7 @@ if not exist "%rotemp%" (
 
 :: Download update script
 cd "%rotemp%"
-powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/RblxOptimizer/main/UpdateI.bat" -OutFile "UpdateI.bat"
+powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdateI.bat" -OutFile "UpdateI.bat"
 
 :: Wait for a short time
 timeout /t 1 /nobreak > nul
