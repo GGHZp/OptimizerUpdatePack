@@ -806,6 +806,7 @@ goto SettingsPage
 cls
 echo.
 echo Preparing...
+timeout /t 2 /nobreak>nul
 del /q /s /f "%localappdata%\temp" > NUL 2>&1
 rmdir /q /s "%localappdata%\temp\ROTWETemp" > NUL 2>&1
 timeout /t 2/nobreak>nul
@@ -814,9 +815,25 @@ cd "%localappdata%\temp\ROTWETemp"
 cls
 echo.
 echo Downloading Installer...
-powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/ROTWEOptPack/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/LoqQualityRobloxOptimizer/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe
+
+
+
+if errorlevel 1 (
+    cls
+    echo.
+    echo Something Went Wrong When Downloading The Installer, It Could Be Incorrect URL Or Outdated URL, The Action Has Been Stopped
+    timeout /t 2 /nobreak>nul
+    echo.
+    echo [ Press Any Key To Continue ]
+    pause>nul
+    goto menu
+)
+
 timeout /t 2 /nobreak>nul
+echo.
 echo Closing Current App And Starting Installer...
+timeout /t 2 /nobreak>nul
 start RobloxOptimizerInstaller.exe
 exit /b 0
 
