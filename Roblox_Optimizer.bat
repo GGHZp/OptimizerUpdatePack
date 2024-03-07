@@ -293,11 +293,12 @@ echo INFO: Online Mode May Have The Latest Logs, But Slower Depending On Connect
 echo INFO: Offline Modes May Have Oudated Logs But Faster.
 echo Please Use
 echo.
-echo [ OF ] Update Logs (Offline)  [ ON ] Update Logs (Online)
+echo [ OF ] Update Logs (Offline)  [ ON ] Update Logs (Online)  [ B ] Go Back
 echo.
 set /p c=Enter Your Input: 
 if /I "%C%" EQU "OF" goto UpdateLogsOffline
 if /I "%C%" EQU "ON" goto UpdatesLogsOnline
+if /I "%C%" EQU "B" goto menu
 echo.
 echo Invalid Choice.
 timeout /t 1 /nobreak>nul
@@ -341,7 +342,7 @@ cls
 echo.
 echo Downloading Information...
 echo.
-echo Downloading: App Version
+echo 1 Out Of 3
 timeout /t 1 /nobreak>Nul
 rem Download Version
 cd "%localappdata%\temp"
@@ -380,7 +381,7 @@ cls
 echo.
 echo Downloading Information..
 echo.
-echo Downloading: Date
+echo 2 Out Of 3
 
 powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogsDate.txt" -OutFile "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt" > NUL 2>&1
 if errorlevel 1 (
@@ -415,7 +416,7 @@ cls
 echo.
 echo Downloading Information...
 echo.
-echo Downloading: Update Logs
+echo 3 Out Of 3
 timeout /t 1 /nobreak>nul
 
 powershell -command Invoke-WebRequest "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogs.txt" -OutFile "%localappdata%\temp\ROTWETemp\UpdLogs.txt" > NUL 2>&1
@@ -1018,6 +1019,8 @@ echo [ C ] Check For Update
 echo.
 echo [ R ] Repair This Program
 echo.
+echo [ RE ] Restart ROTWEOptimizer
+echo.
 echo [ ADVC ] Command Line (For Advanced Users) [Coming Soon]
 echo.
 echo [ X ] Go Back
@@ -1030,6 +1033,7 @@ if /I "%C%" EQU "C" goto ManualCheckForUpdate
 if /I "%C%" EQU "R" goto RepairROTWEOptimizerPrepare
 if /I "%C%" EQU "ADVC" goto commandLineADVC
 if /I "%C%" EQU "X" goto menu
+if /I "%C%" EQU "RE" goto autoCheckForUpdate
 goto SettingsPage
 
 
@@ -1163,8 +1167,7 @@ cd "%localappdata%\temp"
 
 @echo off
 set "rotemp=%localappdata%\temp\ROTWETemp"
-set "updateFile=%rotemp%\ROTWUpdateVer.txt"
-set "versionFile=C:\Program Files\ROTWEOptimizer\Version.txt"
+
 
 :: Check if "ROTWETemp" exists, and create it if not
 if not exist "%rotemp%" (
@@ -1173,13 +1176,13 @@ if not exist "%rotemp%" (
 
 :: Download update script
 cd "%rotemp%"
-powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/UpdateI.exe" -OutFile "UpdateI.exe"
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/UpdateI.exe" -OutFile "%rotemp%\UpdateI.exe"
 
 :: Wait for a short time
 timeout /t 1 /nobreak > nul
 
 :: Execute update script
-cd "C:\Program Files\ROTWEOptimizer"
+cd "%rotemp%"
 start /wait UpdateI.exe > NUL 2>&1
 
 :: Wait for another short time
@@ -1194,7 +1197,8 @@ timeout /t 3 /nobreak > nul
 :: Read version information
 set /p version=<"%versionFile%"
 set /p update=<"%updateFile%"
-
+set "updateFile=%rotemp%\ROTWUpdateVer.txt"
+set "versionFile=C:\Program Files\ROTWEOptimizer\Version.txt"
 :: Compare version numbers
 if %update% gtr %version% (
     goto :ManualUpdatesAreAvailable
