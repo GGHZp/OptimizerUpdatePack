@@ -1,11 +1,7 @@
 Fixed Known Errors.
-Some Errors "Cannot Find Specific Path"
 
 Improved Some Codes.
 
-Added New Features:
-Check For Updates At Start
-Check Roblox Installation
-ROTWEAdvanced (ADVC)
+Added New Features.
 
 Added More Error Handling.

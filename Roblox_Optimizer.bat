@@ -1,5 +1,160 @@
-:menu
 @echo off
+rem App Information
+rem Authorization: HZp, _h3p
+rem App Name: Roblox_Optimizer, ROTWEOptimizer
+rem App Location: C:\Program Files\ROTWEOptimizer\roblox_optimizer
+rem Installed Directory: C:\Program Files\ROTWEOptimizer
+rem Date: March-20-2024    --Please change the date everytime changes made to the script
+rem Version: 1.2           --Please change the version everytime new release of the app
+
+
+
+:autoCheckForUpdate
+title Hi %username% For Safety, Checking for updates And Preparing...
+cls
+echo.
+echo Checking For Updates...
+
+rem Preparing Phase
+
+cd "%localappdata%\temp"
+rmdir /q /s "ROTWETemp" > NUL 2>&1
+mkdir "ROTWETemp" > NUL 2>&1
+
+rem Checking for requirements
+
+cd "C:\Program Files\ROTWEOptimizer"
+if not exist "Version.txt" (
+    cls
+    echo.
+    echo Requirement Missing: Version.txt
+    echo --------------------------------
+    echo Looks Like ROTWEOptimizer Is Not Installed Properly.
+    echo Please Reinstall Or Repair This Program, If This Issue Still Persist Contact Me At Discord: _hzp
+    echo The Process Has Been Stopped Due To Requirement Missing.
+    echo --------------------------------
+    echo [ Press Any Key To Continue ]
+    pause>nul
+    goto menu
+)
+if not exist "Helper.exe" (
+    cls
+    echo.
+    echo Requirement Missing: Helper.exe
+    echo --------------------------------
+    echo Looks Like ROTWEOptimizer Is Not Installed Properly.
+    echo Please Reinstall Or Repair This Program, If This Issue Still Persist Contact Me At Discord: _hzp
+    echo The Process Has Been Stopped Due To Requirement Missing.
+    echo --------------------------------
+    echo [ Press Any Key To Continue ]
+    pause>nul
+    goto menu
+)
+
+cd "%localappdata%\temp\ROTWETemp"
+rem Downloading Update Instruction (UpdateI) From Github
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/UpdateI.exe" -OutFile "%localappdata%\temp\ROTWETemp\UpdateI.exe" > NUL 2>&1
+if errorlevel 1 (
+    cls
+    echo.
+    echo Something Went Wrong, Retrying...
+    powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/UpdateI.exe" -OutFile "%localappdata%\temp\ROTWETemp\UpdateI.exe" > NUL 2>&1
+    if errorlevel 1 (
+        cls
+        echo.
+        echo Something Went Wrong, Updates Checking Has Been Stopped Due To Requirement Missing.
+        echo.
+        echo [ Press Any Key To Continue ]
+        pause>nul
+        goto menu
+    )
+)
+
+cd "%localappdata%\temp\ROTWETemp"
+start /wait UpdateI.exe > NUL 2>&1
+timeout /t 2 /nobreak>nul
+
+set "updateFile=%TEMP%\ROTWETemp\ROTWUpdateVer.txt"
+set "versionFile=C:\Program Files\ROTWEOptimizer\Version.txt"
+set /p update=<"%updateFile%"
+set /p version=<"%versionFile%"
+:: Compare version numbers
+if %update% gtr %version% (
+    goto :AutoUpdatesAreAvailable
+) else if %update% lss %version% (
+    goto :AutoUpdatesNotAvailable
+) else (
+    goto :AutoUpdatesNotAvailable
+)
+
+
+:AutoUpdatesNotAvailable
+title No Updates Available
+cls
+echo.
+echo No Updates Available.
+timeout /t 3 /nobreak>nul
+goto menu
+
+
+
+:AutoUpdatesAreAvailable
+title Updates Are Available!
+cls
+echo.
+echo Update Are Available.
+echo -------------------------------
+echo Current Version: & type "C:\Program Files\ROTWEOptimizer\Version.txt"
+echo.
+echo.
+echo New Version: & type "%localappdata%\temp\ROTWETemp\ROTWUpdateVer.txt"
+echo -------------------------------
+timeout /t 2 /nobreak>nul
+echo [ Press Any Key To Download The Updates ]
+pause>nul
+
+rem Downloading Installer
+cd "%localappdata%\temp\ROTWETemp"
+cls
+echo.
+echo Downloading Installer...
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/LoqQualityRobloxOptimizer/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe > NUL 2>&1
+if errorlevel 1 (
+    cls
+    echo.
+    echo Failed Downloading Installer, Retrying...
+    powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/LoqQualityRobloxOptimizer/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe > NUL 2>&1
+    if errorlevel 1 (
+        cls
+        echo.
+        echo Retry Failed.
+        echo.
+        echo The Process Has Been Stopped Due To Requirement Missing.
+        echo.
+        echo [ Press Any Key To Continue ]
+        pause>Nul
+        goto menu
+    )
+    rem Download Successfully
+)
+rem Download Successfully
+
+cls
+echo.
+echo Starting Installer...
+cd "%localappdata%\temp\ROTWETemp"
+start RobloxOptimizerInstaller.exe > NUL 2>&1
+timeout /t 2 /nobreak>nul
+exit /b 0
+
+
+
+
+
+
+
+:menu
+title The Low Quality Roblox Optimizer By HZp
 cls
 setlocal enabledelayedexpansion
 mode con:cols=140 lines=35
@@ -8,16 +163,19 @@ echo Welcome To Roblox Optimizer. In this tool you can optimize your roblox easi
 echo.
 echo    [ O ] Optimizer Menu     [ R ] Reinstall Roblox     [ S ] Start Roblox     [ F ] Roblox Folder     [ C ] Change ClientAppSettings
 echo.
+echo    [ CI ] Check Roblox Installation
+echo.
 echo    [ ST ] Settings     [ L ] Updates Logs
 echo.
 set /p c=Enter Your Input: 
 if /I "%C%" EQU "O" goto OptimizeRobloxMenu
-if /I "%C%" EQU "R" goto ReinstallRobloxMenu
+if /I "%C%" EQU "R" goto ReinstallRobloxMenuCheckForFolder
 if /I "%C%" EQU "S" goto StartRoblox
 if /I "%C%" EQU "F" goto OpenRobloxFolder
 if /I "%C%" EQU "C" goto ClientSettingsSection
 if /I "%C%" EQU "ST" goto SettingsPage
-if /I "%C%" EQU "L" goto UpdatesLogs
+if /I "%C%" EQU "L" goto UpdateLogsMenu
+if /I "%C%" EQU "CI" goto chckRblxInstMenu
 echo.
 echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
 timeout /t 1 /nobreak>nul
@@ -25,17 +183,273 @@ goto menu
 
 
 
+:chckRblxInstMenu
+cls
+echo.
+echo Page: Roblox Installation Checker
+echo.
+echo Check For Roblox Folders And Files If All Of Them Is Exist.
+echo.
+echo We Have Over 3500+ List Of Directories To Check.
+echo.
+echo [ C ] Start Checking [ B ] Go Back (nvm lol)
+echo.
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "C" goto chckRblxInstPrepare
+if /I "%C%" EQU "B" goto menu
+echo.
+echo Invalid Choice.
+timeout /t 1 /nobreak>nul
+goto chckRblxInstMenu
 
 
-:UpdatesLogs
+
+:chckRblxInstPrepare
+cls
+echo.
+echo Preparing...
+
+    for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
+    rem Roblox is exist at current directory, Changing directory to current directory and then goto chckRblxInst
+    cd /d "%%~dpi"
+    goto chckRblxInst
+)
+    for /f "delims=" %%i in ('dir /s /b "%localappdata%\Roblox\RobloxPlayerBeta.exe"') do (
+    rem Roblox is exist at current directory, Changing directory to current directory and then goto chckRblxInst
+    cd /d "%%~dpi"
+    goto chckRblxInst
+)
+
+
+
+
+:chckRblxInst
+cls
+echo.
+echo Downloading Data...
+cd "%localappdata%\temp"
+if not exist "ROTWETemp" (
+    mkdir "ROTWETemp"
+    goto chckRblxInst
+)
+cd "%localappdata%\temp\ROTWETemp"
+del /q /f "dirList.txt" > NUL 2>&1
+powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/dirList.txt" -OutFile "dirList.txt"
+
+cls
+echo.
+echo Scanning Roblox Installation...
+
+:: Read the list of directories from a text file
+for /f "delims=" %%a in (%localappdata%\temp\ROTWETemp\dirList.txt) do (
+    set "dir=%%a"
+    if not exist "!dir!" (
+        rem One of them or more is not exist
+        goto :bChckRblxInstUnc
+    )
+)
+
+:: If all directories exist, go to label :a
+rem All directories exist
+goto :aChckRblxInstComp
+
+:bChckRblxInstUnc
+rem One or more directories do not exist
+cls
+echo.
+echo Roblox Is Not Installed Properly, A Files/Folders Is Missing.
+echo.
+echo Missing: %dir%
+echo.
+echo [ Press Any Key To Go Back ]
+pause>nul
+goto menu
+
+:aChckRblxInstComp
+rem Do something if all directories exist
+cls
+echo.
+echo Scanning Is Complete.
+echo.
+echo Roblox Is Installed Properly!
+echo.
+echo [ Press Any Key To Go Back ]
+pause>Nul
+goto menu
+
+
+
+
+
+
+
+
+:UpdateLogsMenu
+cls
+echo.
+echo Page: Update Logs
+echo.
+echo INFO: Online Mode May Have The Latest Logs, But Slower Depending On Connection Speed.
+echo INFO: Offline Modes May Have Oudated Logs But Faster.
+echo Please Use
+echo.
+echo [ OF ] Update Logs (Offline)  [ ON ] Update Logs (Online)
+echo.
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "OF" goto UpdateLogsOffline
+if /I "%C%" EQU "ON" goto UpdatesLogsOnline
+echo.
+echo Invalid Choice.
+timeout /t 1 /nobreak>nul
+goto UpdateLogsMenu
+
+
+:UpdateLogsOffline
+echo.
 cls
 echo Version: & type "C:\Program Files\ROTWEOptimizer\Version.txt"
 echo.
+echo Date: March-3-2024
+echo.
 echo Updates Logs:
 echo -------------------------------------
-echo Fixed some errors
+echo Fixed Known Errors.
 echo.
-echo Improved Code
+echo Improved Some Codes.
+echo.
+echo Added New Features.
+echo.
+echo Added More Error Handling.
+echo -------------------------------------
+echo Wrong Version? Please Update The Program Again Or Repair
+echo.
+timeout /t 2 /nobreak>nul
+echo [ Press Any Key To Go Back ]
+pause>nul
+goto menu
+
+
+
+
+:UpdatesLogsOnline
+
+del /q /f "%localappdata%\temp\ROTWETemp\UpdLogs.txt" > NUL 2>&1 
+del /q /f "%localappdata%\temp\ROTWETemp\Version.txt" > NUL 2>&1
+del /q /f "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt" > NUL 2>&1
+
+cls
+echo.
+echo Downloading Information...
+echo.
+echo Downloading: App Version
+timeout /t 1 /nobreak>Nul
+rem Download Version
+cd "%localappdata%\temp"
+if not exist "ROTWETemp" (
+    mkdir "ROTWETemp" > NUL 2>&1
+    goto UpdatesLogsOnline
+) 
+cd "%localappdata%\temp\ROTWEOptimizer"
+
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/Version.txt" -OutFile "%localappdata%\temp\ROTWETemp\Version.txt" > NUL 2>&1
+if errorlevel 1 (
+    cls
+    echo.
+    echo Failed Downloading Version, Retrying...
+    powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/Version.txt" -OutFile "%localappdata%\temp\ROTWETemp\Version.txt" > NUL 2>&1
+    if errorlevel 1 (
+        cls
+        echo.
+        echo Retry Failed.
+        echo.
+        echo This Process Has Been Stopped Due To Requirement Missing, Sorry.
+        echo.
+        echo You Can Always Check Update Logs Offline, It May Have Some Outdated Logs.
+        echo.
+        echo [ Press Any Key To Go Back ]
+        pause>Nul
+        goto menu
+    )
+    rem Version successfully downloaded
+)
+
+rem Version Successfully Downloaded
+rem Download Date
+
+cls
+echo.
+echo Downloading Information..
+echo.
+echo Downloading: Date
+
+powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogsDate.txt" -OutFile "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt" > NUL 2>&1
+if errorlevel 1 (
+    cls
+    echo.
+    echo Failed Downloading Date, Retrying...
+    powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogsDate.txt" -OutFile "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt" > NUL 2>&1
+    if errorlevel 1 (
+        cls
+        echo.
+        echo Retry Failed.
+        echo.
+        echo This Process Has Been Stopped Due To Requirement Missing, Sorry.
+        echo.
+        echo You Can Always Check Update Logs Offline, It May Have Some Outdated Logs.
+        echo.
+        echo [ Press Any Key To Go Back ]
+        pause>Nul
+        goto menu
+    )
+    rem Downloaded Successfully
+    set "getDate_UpdLogs=type "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt""
+)
+rem Downloaded Successfully
+set "getDate_UpdLogs=type "%localappdata%\temp\ROTWETemp\UpdLogsDate.txt""
+
+
+rem Date successfully downloaded
+rem Download Update Logs
+
+cls
+echo.
+echo Downloading Information...
+echo.
+echo Downloading: Update Logs
+timeout /t 1 /nobreak>nul
+
+powershell -command Invoke-WebRequest "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogs.txt" -OutFile "%localappdata%\temp\ROTWETemp\UpdLogs.txt" > NUL 2>&1
+if errorlevel 1 (
+    cls
+    echo.
+    echo Failed Downloading Update Logs, Retrying...
+    powershell -command Invoke-WebRequest "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdLogs.txt -OutFile "%localappdata%\temp\ROTWETemp\UpdLogs.txt" > NUL 2>&1
+    if errorlevel 1 (
+        cls
+        echo.
+        echo Retry Failed.
+        echo.
+        echo This Process Has Been Stopped Due To Requirement Missing, Sorry.
+        echo.
+        echo You Can Always Check Update Logs Offline, It May Have Some Outdated Logs.
+        echo.
+        echo [ Press Any Key To Go Back ]
+        pause>Nul
+        goto menu
+    )
+    rem Downloaded Successfully
+)
+rem Downloaded Successfully
+
+echo.
+cls
+echo Version: & type "%localappdata%\temp\ROTWETemp\Version.txt"
+echo.
+%getDate_UpdLogs%
+echo.
+echo Updates Logs:
+echo -------------------------------------
+type "%localappdata%\temp\ROTWETemp\UpdLogs.txt"
 echo -------------------------------------
 echo Wrong Version? Please Update The Program Again Or Repair
 echo.
@@ -68,189 +482,6 @@ for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerB
     start "" "%%i"
 )
 goto menu
-
-
-
-
-:ReinstallRobloxMenu
-cls
-echo.
-echo Page: Roblox Reinstallation
-echo.
-echo You Can Use This To Reinstall Roblox, This Program Will Delete All The Files Exist, And Some Registry Keys
-echo.
-echo This May Fix Some Issues That You Have On Roblox.
-echo -------------------------------------
-echo [ R ] Reinstall roblox
-echo.
-echo [ B ] Go Back
-echo -------------------------------------
-set /p c=Enter Your Input: 
-if /I "%C%" EQU "R" goto ReinstallRoblox
-if /I "%C%" EQU "B" goto Menu
-echo.
-echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
-timeout /t 1 /nobreak>nul
-goto ReinstallRobloxMenu
-
-
-
-
-
-:ReinstallRoblox
-timeout /t 1 /nobreak>nul
-cls
-echo.
-echo Preparing...
-timeout /t 2 /nobreak>nul
-rmdir /q /s "%localappdata%\temp\ROTWETemp" > NUL 2>&1
-del /q /s /f "%localappdata%\temp" > NUL 2>&1
-cd "%localappdata%\temp"
-mkdir "ROTWETemp" > NUL 2>&1
-
-goto DownloadRobloxInstaller
-
-
-
-
-
-:DownloadRobloxInstaller
-cls
-echo.
-echo Downloading Roblox Installer...
-cd "%localappdata%\temp\ROTWETemp"
-powershell -command Invoke-WebRequest -URI "https://www.roblox.com/download/client" -OutFile RobloxPlayrInstaller.exe > NUL 2>&1
-if errorlevel 1 (
-    cls
-    echo.
-    echo An Error Occured When Downloading The Installer, The Action Has Been Stopped
-    echo.
-    echo If This Error Still Persist, Please Report This By Messaging Me On Discord: _hzp
-    timeout /t 2 /nobreak>nul
-    echo.
-    echo [ Press Any Key To Continue ]
-    pause>nul
-    goto Menu
-)
-
-goto DeleteRobloxFolderForReinstallation
-
-
-:DeleteRobloxFolderForReinstallation
-
-rem Backing Up Roblox In Case If There's Server Errors or Connection Problem. If It Successfully Completed It Will Deletes The Back Up Folder
-    
-    for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
-    cd "%localappdata\temp\ROTWETemp" > NUL 2>&1
-    mkdir "OldRobloxFolder" > NUL 2>&1
-    timeout /t 1 /nobreak>nul
-    move /y "%%~dpi" "%localappdata%\temp\ROTWETemp\OldRobloxFolder" > NUL 2>&1
-)
-    
-
-    rem Deletes Roblox Stuff
-    cd "%localappdata%\temp\ROTWETemp"
-    cls
-    echo.
-    echo Uninstalling Roblox...
-    timeout /t 2 /nobreak>nul
-    rmdir /q /s "C:\ProgramData\Roblox-Player" > NUL 2>&1
-    del /q /f "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Roblox\Roblox Player" > NUL 2>&1
-    del /q /f "%userprofile%\Desktop\Roblox Player" > NUL 2>&1
-    reg delete "HKEY_CURRENT_USER\SOFTWARE\Roblox" /f > NUL 2>&1
-    reg delete "HKEY_CURRENT_USER\SOFTWARE\Roblox Corporation" /f > NUL 2>&1
-    reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox" /f > NUL 2>&1
-    reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox\Roblox Corporation" /f > NUL 2>&1
-    
-
-for /f "delims=" %%i in ('dir /s /b "C:\Program Files(x86)\Roblox\RobloxPlayerBeta.exe" 2^>NUL') do (
-    rmdir /q /s "%%~dpi" > NUL 2>&1
-)
-
-
-for /f "delims=" %%j in ('dir /s /b "%localappdata%\Roblox\RobloxPlayerBeta.exe" 2^>NUL') do (
-    rmdir /q /s "%%~dpj" > NUL 2>&1
-)
-
-for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
-    reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" /v "%%~dpiRobloxPlayerBeta.exe" /f
-)
-goto StartRobloxInstaller
-
-
-
-
-:StartRobloxInstaller
-
-rem Error Handling:
-if exist "%localappdat\temp\ROTWETemp\RobloxPlayerInstaller.exe" (
-    cls
-    echo.
-    echo Reinstalling...
-    cd "%localappdata%\temp\ROTWETemp"
-    start /min /wait RobloxPlayerInstaller.exe > NUL 2>&1
-    timeout /t 2 /nobreak>nul
-    taskkill /f /im "RobloxPlayerBeta.exe" > NUL 2>&1
-
-    goto ReinstallationComplete
-   
-)
-
-cls
-echo.
-echo The Installer Is Not Downloaded Correctly. Do You Want To Try Again?
-echo.
-echo [ Y ] Yes  [ N ] No
-echo.
-set /p c=Enter Your Input: 
-if /I "%C%" EQU "Y" goto DownloadRobloxInstallerBackup
-if /I "%C%" EQU "N" goto DownloadRobloxInstallerCancelled
-echo The Command "%C%" Is Not Recognized By ROTWEOptimizer & timeout /t 2 /nobreak>nul
-goto StartRobloxInstaller 
-
-
-
-:DownloadRobloxInstallerBackup
-cls
-echo.
-echo Downloading Roblox Installer...
-cd "%localappdata%\temp\ROTWETemp"
-powershell -command Invoke-WebRequest -URI "https://www.roblox.com/download/client" -OutFile RobloxPlayerInstaller.exe > NUL 2>&1
-if errorlevel 1 (
-    cls
-    echo.
-    echo An Error Occured When Downloading The Installer, The Action Has Been Stopped
-    echo.
-    echo If This Error Still Persist, Please Report This By Messaging Me On Discord: _hzp
-    timeout /t 2 /nobreak>nul
-    echo.
-    echo [ Press Any Key To Continue ]
-    pause>nul
-    goto Menu
-)
-
-goto DeleteRobloxFolderForReinstallation
-
-
-
-
-
-:ReinstallationComplete
-
-for /f "delims=" %%i in ('dir /s /b "%localappdata%\temp\ROTWETemp\RobloxPlayerBeta.exe"') do (
-    rmdir /q /s "%%~dpi" > NUL 2>&1
-)
-
-cls
-echo.
-echo Reinstallation Complete.
-timeout /t 2 /nobreak>nul
-goto menu
-
-
-
-
-
 
 :OptimizeRobloxMenu
 cls
@@ -787,6 +1018,8 @@ echo [ C ] Check For Update
 echo.
 echo [ R ] Repair This Program
 echo.
+echo [ ADVC ] Command Line (For Advanced Users) [Coming Soon]
+echo.
 echo [ X ] Go Back
 echo -----------------------------------
 
@@ -795,8 +1028,39 @@ echo.
 set /p c=Enter Your Input: 
 if /I "%C%" EQU "C" goto ManualCheckForUpdate
 if /I "%C%" EQU "R" goto RepairROTWEOptimizerPrepare
+if /I "%C%" EQU "ADVC" goto commandLineADVC
 if /I "%C%" EQU "X" goto menu
 goto SettingsPage
+
+
+
+:commandLineADVC
+cls
+echo. 
+echo Checking For Requirements...
+
+if not exist "C:\Program Files\ROTWEOptimizer\TL.bat" (
+    cls
+    echo.
+    echo Required File Is Not Installed, Do You Want To Install Them?
+    echo.
+    echo File Size: Less Than 10 MB
+    echo.
+    echo [ I ] Install [ C ] Cancel (Go Back)
+    echo.
+    set /p c=Enter Your Input: 
+    if /I "%C%" EQU "I" goto instROTWECmdLine
+    if /I "%C%" EQU "C" goto menu
+    echo.
+    echo Invalid Choice.
+    timeout /t 1 /nobreak>nul
+    goto commandLineADVC
+)
+
+:instROTWECmdLine
+cls
+echo.
+echo Installing...
 
 
 
@@ -909,14 +1173,14 @@ if not exist "%rotemp%" (
 
 :: Download update script
 cd "%rotemp%"
-powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/UpdateI.bat" -OutFile "UpdateI.bat"
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/OptimizerUpdatePack/raw/main/UpdateI.exe" -OutFile "UpdateI.exe"
 
 :: Wait for a short time
 timeout /t 1 /nobreak > nul
 
 :: Execute update script
 cd "C:\Program Files\ROTWEOptimizer"
-Helper exec hide "%rotemp%\UpdateI.bat"
+start /wait UpdateI.exe > NUL 2>&1
 
 :: Wait for another short time
 timeout /t 1 /nobreak > nul
@@ -999,7 +1263,7 @@ timeout /t 2 /nobreak>nul
 cls
 echo.
 echo Downloading Latest Installer...
-powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/ROTWEOptPack/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe
+powershell -command Invoke-WebRequest -URI "https://github.com/GGHZp/LoqQualityRobloxOptimizer/raw/main/RobloxOptimizerInstaller.exe" -OutFile RobloxOptimizerInstaller.exe
 timeout /t 2 /nobreak>nul
 cls
 echo.
@@ -1076,21 +1340,21 @@ echo For More Information Please Enter The Command "H" For Help, To See Option I
 echo.
 echo (Case-Insenstive)
 echo -------------------------------------
-echo [ 1 ] Shaders Config Status: %shadersstatus%
+echo [ 1 ] Shaders Config State: %shadersstatus%
 echo.
-echo [ 2 ] Textures Config Status: %texturestatus%
+echo [ 2 ] Textures Config State: %texturestatus%
 echo.
-echo [ 3 ] UI Config Status: %UIStatus%
+echo [ 3 ] UI Config State: %UIStatus%
 echo.
-echo [ 4 ] Sky Config Status: %skyStatus%
+echo [ 4 ] Sky Config State: %skyStatus%
 echo.
-echo [ 5 ] Terrain Config Status: %terrainStatus%
+echo [ 5 ] Terrain Config State: %terrainStatus%
 echo.
-echo [ 6 ] ClientAppSettings Config Status: %CSStatus%
+echo [ 6 ] ClientAppSettings Config State: %CSStatus%
 echo.
-echo [ 7 ] Cursor Replacement Status: %CursRepl%
+echo [ 7 ] Cursor Replacement State: %CursRepl%
 echo.
-echo [ 8 ] Fullscreen Optimization: %FRO%
+echo [ 8 ] Fullscreen Optimization State: %FRO%
 echo.
 echo [ H ] Help
 echo.
@@ -2031,7 +2295,7 @@ cls
 echo.
 echo Information About Optimizing Game UI
 echo ----------------------------------------------
-echo No Information Available For This Configs.
+echo No Information Available For This Config.
 echo.
 timeout /t 2 /nobreak>nul
 echo [ Press Any Key To Go Back ]
@@ -2161,8 +2425,312 @@ echo Enter Your Input: set.[2]=DISABLE   ^< ========
 echo.
 echo              This Command ^^ 
 echo                 Will Disable The Config "Textures" As The Second Option.
+echo                    To Disable All The Configs Please Enter "ALL" Inside The "[]"
+echo                      Example: set [all] Config=enable 
 echo.
 timeout /t 5 /nobreak>nul
 echo [ Press Any Key To Go Back ]
 pause>nul
 goto RobloxOptConfig
+
+
+
+
+
+
+
+
+:ReinstallRobloxMenuCheckForFolder
+rem Check If Backup Folder Is Exist Or Not
+cls
+echo.
+echo Please Wait...
+for /f "delims=" %%i in ('dir /s /b "%localappdata%\temp\ROTWEReins\RobloxPlayerBeta.exe"') do (
+rem Backup Folder Is Found
+goto ReinstallRobloxMenu2
+)
+rem Backup Folder Is Not Found
+goto ReinstallRobloxMenu
+
+
+rem Backup Folder Is Not Found
+:ReinstallRobloxMenu
+cls
+echo.
+echo Page: Roblox Reinstallation
+echo.
+echo You Can Use This To Reinstall Roblox, This Program Will Delete All The Files Exist, And Some Registry Keys
+echo.
+echo This May Fix Some Issues That You Have On Roblox.
+echo -------------------------------------
+echo [ R ] Reinstall roblox
+echo.
+echo [ B ] Go Back
+echo -------------------------------------
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "R" goto ReinstallRobloxPrepareSetFolder
+if /I "%C%" EQU "B" goto Menu
+echo.
+echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
+timeout /t 1 /nobreak>nul
+goto ReinstallRobloxMenu
+
+
+
+
+
+rem Backup Folder Is Found
+:ReinstallRobloxMenu2
+cls
+echo.
+echo Page: Roblox Reinstallation
+echo.
+echo You Can Use This To Reinstall Roblox, This Program Will Delete All The Files Exist, And Some Registry Keys
+echo.
+echo This May Fix Some Issues That You Have On Roblox.
+echo -------------------------------------
+echo [ R ] Reinstall roblox
+echo.
+echo [ RS ] Restore Point
+echo.
+echo [ B ] Go Back
+echo -------------------------------------
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "R" goto ReinstallRobloxPrepareSetFolder
+if /I "%C%" EQU "RS" goto RestoreBackupFolder
+if /I "%C%" EQU "B" goto Menu
+echo.
+echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
+timeout /t 1 /nobreak>nul
+goto ReinstallRobloxMenu
+
+
+
+
+
+:RestoreBackupFolderMenu
+cls
+echo.
+echo Page: Reinstallation Restore Point
+echo.
+echo You Can Use this To Restore All Deleted Files/Folders When The Installer Is Not Running Properly.
+echo -------------------------------------
+echo [ R ] Restore
+echo.
+echo [ D ] Delete Restore Point
+echo.
+echo [ B ] Go Back
+echo -------------------------------------
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "R" goto RestoreBackupFolder
+if /I "%C%" EQU "D" goto DeleteRestoreePoint
+if /I "%C%" EQU "B" goto ReinstallRobloxMenuCheckForFolder
+goto RestoreBackupFolderMenu
+
+
+
+
+:ReinstallRobloxPrepareSetFolder
+cls
+echo.
+echo Preparing...
+
+rem error handling
+if not exist "C:\Program Files\ROTWEOptimizer" (
+    cls
+    echo.
+    echo Required Folder Is Not Exist, Please Repair This Program At Settings, Or Install This Program Manually.
+    echo.
+    echo [ Press Any Key To Go Back ]
+    pause>nul
+    goto menu
+)
+rem error handling 2
+if exist "C:\Program Files\ROTWEOptimizer\Roblox_Backup" (
+    :bckpFoldIsExist
+    cls
+    echo.
+    echo Previous Backup Is Found, In Order To Continue This Process, Previously Backup Have To Deleted.
+    echo.
+    echo Do You Want To Delete The Backup? If You Choose [ N ] The Process Will Be Canceled.
+    echo.
+    echo [ Y ] Yes [ N ] No
+    echo.
+    set /p c=Enter Your Input: 
+    if /I "%C%" EQU "Y" goto reinsContinuebckp
+    if /I "%C%" EQU "N" goto reinsCancel
+    echo.
+    echo Invalid Choice.
+    timeout /t 1 /nobreak>nul
+    goto bckpFoldIsExist
+)
+:reinsContinuebckp
+cls
+echo.
+echo Preparing...
+    
+    rmdir /q /s "%temp%\ROTWETemp" 
+    cd "%temp%"
+    mkdir "ROTWETemp" > NUL 2>&1
+
+
+    rmdir /q /s "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+    timeout /t 1 /nobreak>nul
+    cd "C:\Program Files\ROTWEOptimizer" & mkdir "Roblox_Backup" > NUL 2>&1
+
+    rem Check for RobloxPlayerBeta.exe in the Roblox folder
+    for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
+        rem RobloxPlayerBeta.exe is found, Backing up Roblox files/folders
+        move /y /s "%%~dpi" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y /s "C:\ProgramData" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y /s "%localappdata%\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y "%userprofile%\Desktop\Roblox Player" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+
+        reg export "HKEY_CURRENT_USER\SOFTWARE\ROBLOX Corporation" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\ROBLOX Corporation (HCU)" > NUL 2>&1
+        reg export "HKEY_CURRENT_USER\SOFTWARE\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\Roblox (HCU)" > NUL 2>&1
+    
+        reg export "HKEY_LOCAL_MACHINE\SOFTWARE\ROBLOX Corporation" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\ROBLOX Corporation (HLM)" > NUL 2>&1
+        reg export "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\Roblox (HLM)" > NUL 2>&1
+        goto downloadRoblox
+    )
+    rem If Roblox is not found at current directory then search at the following directory
+        for /f "delims=" %%j in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
+
+        rem RobloxPlayerBeta.exe is found, Backing up Roblox files/folders
+        move /y /s "%%~dpj" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y /s "C:\ProgramData" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y /s "%localappdata%\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+        move /y "%userprofile%\Desktop\Roblox Player" "C:\Program Files\ROTWEOptimizer\Roblox_Backup" > NUL 2>&1
+
+        reg export "HKEY_CURRENT_USER\SOFTWARE\ROBLOX Corporation" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\ROBLOX Corporation (HCU)" > NUL 2>&1
+        reg export "HKEY_CURRENT_USER\SOFTWARE\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\Roblox (HCU)" > NUL 2>&1
+    
+        reg export "HKEY_LOCAL_MACHINE\SOFTWARE\ROBLOX Corporation" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\ROBLOX Corporation (HLM)" > NUL 2>&1
+        reg export "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox" "C:\Program Files\ROTWEOptimizer\Roblox_Backup\Roblox (HLM)" > NUL 2>&1
+        goto downloadRoblox
+
+    )
+    rem Not found at current directory, Could be it got deleted
+    goto downloadRoblox
+
+
+
+
+    :downloadRoblox
+    cls
+    echo.
+    echo Downloading Roblox Installer...
+    rem error handling
+    if not exist "%temp%\ROTWETemp" (
+        cd %temp%
+        mkdir "ROTWETemp" > NUL 2>&1
+        goto downloadRoblox
+    )
+    rem Downloading Roblox from it's official website
+    powershell -command Invoke-WebRequest -URI "https://www.roblox.com/download/client" -OutFile "%temp%\ROTWETemp\RobloxPlayerInstaller.exe"
+    pause
+    if errorlevel 1 (
+    rem Download failed
+        cls
+        echo.
+        echo Download Failed, Retrying...
+        powershell -command Invoke-WebRequest -URI "https://www.roblox.com/download/client" -OutFile "%temp%\ROTWETemp\RobloxPlayerInstaller.exe"
+        pause
+        if errorlevel 1 (
+            cls
+            echo.
+            echo Download Failed, Reinstallation Process Has Been Stopped, Please Try Again Later
+            echo.
+            echo Temp, Backup Folder Has Been Cleared.
+            echo.
+            echo [ Press Any Key To Continue ]
+            pause>nul
+            goto menu
+        )
+        rem Retrying successfully
+        goto downloadRobloxSuccess
+    )
+    :downloadRobloxSuccess
+    rem Download successfully, Rem deleting Roblox
+    cls
+    echo.
+    echo Uninstalling Roblox...
+    
+        rem Check for RobloxPlayerBeta.exe in the Roblox folder
+    for /f "delims=" %%i in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
+        rem RobloxPlayerBeta.exe is found, Backing up Roblox files/folders
+        del /q /s /f "%%~dpi" > NUL 2>&1
+        del /q /s /f "C:\ProgramData" > NUL 2>&1
+        del /q /s /f "%localappdata%\Roblox" > NUL 2>&1
+        del /q /s /f "%userprofile%\Desktop\Roblox Player" > NUL 2>&1
+
+        reg delete "HKEY_CURRENT_USER\SOFTWARE\ROBLOX Corporation" > NUL 2>&1
+        reg delete "HKEY_CURRENT_USER\SOFTWARE\Roblox" > NUL 2>&1
+    
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\ROBLOX Corporation" > NUL 2>&1
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox" > NUL 2>&1
+        goto startInstaller
+    )
+    rem If Roblox is not found at current directory then search at the following directory
+        for /f "delims=" %%j in ('dir /s /b "C:\Program Files (x86)\Roblox\RobloxPlayerBeta.exe"') do (
+
+        rem RobloxPlayerBeta.exe is found, Backing up Roblox files/folders
+        del /q /s /f "%%~dpj" > NUL 2>&1
+        del /q /s /f "C:\ProgramData" > NUL 2>&1
+        del /q /s /f "%localappdata%\Roblox" > NUL 2>&1
+        del /q /s /f "%userprofile%\Desktop\Roblox Player" > NUL 2>&1
+
+        reg delete "HKEY_CURRENT_USER\SOFTWARE\ROBLOX Corporation" > NUL 2>&1
+        reg delete "HKEY_CURRENT_USER\SOFTWARE\Roblox" > NUL 2>&1
+    
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\ROBLOX Corporation" > NUL 2>&1
+        reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Roblox" > NUL 2>&1
+        goto startInstaller
+
+    )
+    rem Not found at current directory, Could be it got deleted
+    goto startInstaller
+
+
+
+    :startInstaller
+    rem Installing Roblox by starting the installer
+    cls
+    echo.
+    echo Installing...
+
+    cd "%temp%\ROTWETemp" > NUL 2>&1
+    if exist "RobloxPlayerInstaller.exe" (
+        start /wait /min RobloxPlayerInstaller.exe
+        rem Waiting for it to complete
+        timeout /t 1 /nobreak>nul
+        taskkill /f /im RobloxPlayerBeta.exe > NUL 2>&1
+        cls
+        echo.
+        echo Installation Complete.
+        echo.
+        echo If You Ecountered Errors When Installing, Please Restore Everything By Choosing [ RS ] In Reinstallation Menu.
+        echo.
+        echo [ Press Any Key To Go Back ]
+        pause>nul
+        goto menu
+    )
+    rem Roblox installer is not found, Downloading one and then going back
+    cls
+    echo.
+    echo Installer Not Found.
+    echo.
+    echo Downloading Installer...
+    powershell -command Invoke-WebRequest -URI "https://www.roblox.com/download/client" -OutFile "%temp%\ROTWETemp\RobloxPlayerInstaller.exe"
+    goto startInstaller
+    
+
+
+:requirementsCheck
+title Hi %username%, Please Wait While This Program Is Checking For Requirements
+cls
+echo.
+echo Checking For Program Requirements...
+
+cd "C:\Program Files"
+rem Add more script below, (Later)
