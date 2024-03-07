@@ -2,7 +2,9 @@ Fixed Known Errors.
 
 Improved Some Codes.
 
-Added New Features, New Features:
+New Start Menu.
+
+Added New Features:
 Roblox Installation Checker
 Offline And Online Update Logs Viewer
 Automatic Check For Updates (Security)

@@ -159,15 +159,24 @@ cls
 setlocal enabledelayedexpansion
 mode con:cols=140 lines=35
 echo.
-echo Welcome To Roblox Optimizer. In this tool you can optimize your roblox easier.
+echo                         Welcome To Roblox Optimizer. In this tool you can optimize your roblox easier.
+echo                        --------------------------------------------------------------------------------
 echo.
-echo    [ O ] Optimizer Menu     [ R ] Reinstall Roblox     [ S ] Start Roblox     [ F ] Roblox Folder     [ C ] Change ClientAppSettings
+echo                                                      [ O ] Optimizer Menu
 echo.
-echo    [ CI ] Check Roblox Installation
+echo                              [ F ] Roblox Folder   [ S ] Start Roblox App   [ R ] Reinstall Roblox  
 echo.
-echo    [ ST ] Settings     [ L ] Updates Logs
+echo                               [ C ] Change ClientAppSettings   [ CI ] Check Roblox Reinstallation
 echo.
-set /p c=Enter Your Input: 
+echo                                                             OTHERS
+echo                                                             ------
+echo.
+echo                                               [ ST ] Settings   [ L ] Updates Logs
+echo.
+echo.
+echo.
+echo                                                             Choices:
+set /p c=.                                                              
 if /I "%C%" EQU "O" goto OptimizeRobloxMenu
 if /I "%C%" EQU "R" goto ReinstallRobloxMenuCheckForFolder
 if /I "%C%" EQU "S" goto StartRoblox
@@ -180,7 +189,6 @@ echo.
 echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
 timeout /t 1 /nobreak>nul
 goto menu
-
 
 
 :chckRblxInstMenu
