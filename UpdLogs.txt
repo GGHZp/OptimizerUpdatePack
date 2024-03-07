@@ -2,6 +2,9 @@ Fixed Known Errors.
 
 Improved Some Codes.
 
-Added New Features.
+Added New Features, New Features:
+Roblox Installation Checker
+Offline And Online Update Logs Viewer
+Automatic Check For Updates (Security)
 
 Added More Error Handling.
