@@ -176,7 +176,7 @@ echo.
 echo.
 echo.
 echo                                                             Choices:
-set /p c=.                                                              
+set /p c=^|                                                              
 if /I "%C%" EQU "O" goto OptimizeRobloxMenu
 if /I "%C%" EQU "R" goto ReinstallRobloxMenuCheckForFolder
 if /I "%C%" EQU "S" goto StartRoblox
