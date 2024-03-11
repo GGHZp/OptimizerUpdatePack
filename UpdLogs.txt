@@ -10,4 +10,10 @@ Offline And Online Update Logs Viewer
 Automatic Check For Updates (Security)
 Now You Can Restart ROTWEOptimizer At Settings Page!
 
+New Update Checking System:
+Added Update Message
+Added More Error Handling To Update Checking System
+Improved Code
+
+
 Added More Error Handling.
