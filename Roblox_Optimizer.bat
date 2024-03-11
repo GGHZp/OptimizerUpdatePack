@@ -7,6 +7,41 @@ rem Installed Directory: C:\Program Files\ROTWEOptimizer
 rem Date: March-20-2024    --Please change the date everytime changes made to the script
 rem Version: 1.2           --Please change the version everytime new release of the app
 
+:setColor
+set "Configtxtfile=C:\Program Files\ROTWEOptimizer\TextsColor"
+
+
+for /F "delims=" %%i in ('type "%Configtxtfile%"') do (
+    if "%%i"=="1" (
+        color 1 & goto autoCheckForUpdate
+    ) else if "%%i"=="2" (
+        color 2 & goto autoCheckForUpdate
+    ) else if "%%i"=="3" (
+        color 3 & goto autoCheckForUpdate
+    ) else if "%%i"=="4" (
+        color 4 & goto autoCheckForUpdate
+    ) else if "%%i"=="5" (
+        color 5 & goto autoCheckForUpdate
+    ) else if "%%i"=="6" (
+        color 6 % goto autoCheckForUpdate
+    ) else if "%%i"=="7" (
+        color 7 % goto autoCheckForUpdate
+    ) else if "%%i"=="8" (
+        color 8 & goto autoCheckForUpdate
+    ) else if "%%i"=="9" (
+        color 9 & goto autoCheckForUpdate
+    ) else if "%%i"=="A" (
+        color a & goto autoCheckForUpdate
+    ) else if "%%i"=="B" (
+        color b & goto autoCheckForUpdate
+    ) else if "%%i"=="C" (
+        color c & goto autoCheckForUpdate
+    )
+)
+
+color & goto autoCheckForUpdate
+pause
+
 
 
 :autoCheckForUpdate
@@ -63,12 +98,37 @@ if errorlevel 1 (
         cls
         echo.
         echo Something Went Wrong, Updates Checking Has Been Stopped Due To Requirement Missing.
-        echo.
-        echo [ Press Any Key To Continue ]
-        pause>nul
+        timeout /t 3 /nobreak>nul
         goto menu
     )
 )
+rem Downloading updates message to tell users if it critical updates or small updates
+
+powershell -command Invoke-WebRequest -URI "https://raw.githubusercontent.com/GGHZp/OptimizerUpdatePack/main/updMsg.txt" -OutFile "%localappdata%\temp\ROTWETemp\updMsg.txt" > NUL 2>&1
+
+if %errorlevel% equ 0 (
+    set "updMsgSt=success"
+    goto :chckUpdMsgSt
+)
+set "updMsgSt=failed"
+goto :chckUpdMsgSt
+
+
+:chckUpdMsgSt
+if "%updMsgSt%"=="success" (
+    set "updMsg=type %localappdata%\temp\ROTWETemp\updMsg.txt & echo."
+    goto autoCheckForUpdate2
+) else if "%updMsgSt%"=="failed" (
+    set "updMsg=echo Unknown"
+    goto autoCheckForUpdate2
+)
+set "updMsg=echo Unknown"
+goto autoCheckForUpdate2
+
+
+
+
+:autoCheckForUpdate2
 
 cd "%localappdata%\temp\ROTWETemp"
 start /wait UpdateI.exe > NUL 2>&1
@@ -108,6 +168,8 @@ echo Current Version: & type "C:\Program Files\ROTWEOptimizer\Version.txt"
 echo.
 echo.
 echo New Version: & type "%localappdata%\temp\ROTWETemp\ROTWUpdateVer.txt"
+echo.
+echo Update Message: & call %updMsg%
 echo -------------------------------
 timeout /t 2 /nobreak>nul
 echo [ Press Any Key To Download The Updates ]
@@ -164,7 +226,7 @@ echo                        ----------------------------------------------------
 echo.
 echo                                                      [ O ] Optimizer Menu
 echo.
-echo                              [ F ] Roblox Folder   [ S ] Start Roblox App   [ R ] Reinstall Roblox  
+echo                              [ F ] Roblox Folder   [ S ] Start Roblox App   [ R ] Reinstall Roblox
 echo.
 echo                               [ C ] Change ClientAppSettings   [ CI ] Check Roblox Reinstallation
 echo.
@@ -178,17 +240,21 @@ echo.
 echo                                                             Choices:
 set /p c=^|                                                              
 if /I "%C%" EQU "O" goto OptimizeRobloxMenu
-if /I "%C%" EQU "R" goto ReinstallRobloxMenuCheckForFolder
+if /I "%C%" EQU "R" echo. & echo The Choice "R" Is Currently Disabled Due To Maintenance & timeout /t 3 /nobreak>nul & goto menu
 if /I "%C%" EQU "S" goto StartRoblox
 if /I "%C%" EQU "F" goto OpenRobloxFolder
 if /I "%C%" EQU "C" goto ClientSettingsSection
 if /I "%C%" EQU "ST" goto SettingsPage
 if /I "%C%" EQU "L" goto UpdateLogsMenu
 if /I "%C%" EQU "CI" goto chckRblxInstMenu
+if /I "%C%" EQU "D" goto delUnRobloxFilesMenu
 echo.
 echo The Command "%C%" Is Not Recognized By ROTWEOptimizer. Please Enter A Proper Command.
 timeout /t 1 /nobreak>nul
 goto menu
+
+
+rem "R" for ReinstallRobloxMenuCheckForFolder Label
 
 
 :chckRblxInstMenu
@@ -1029,6 +1095,8 @@ echo [ R ] Repair This Program
 echo.
 echo [ RE ] Restart ROTWEOptimizer
 echo.
+echo [ TC ] Theme Color
+echo.
 echo [ ADVC ] Command Line (For Advanced Users) [Coming Soon]
 echo.
 echo [ X ] Go Back
@@ -1042,7 +1110,127 @@ if /I "%C%" EQU "R" goto RepairROTWEOptimizerPrepare
 if /I "%C%" EQU "ADVC" goto commandLineADVC
 if /I "%C%" EQU "X" goto menu
 if /I "%C%" EQU "RE" goto autoCheckForUpdate
+if /I "%C%" EQU "TC" goto themeColorCheck
 goto SettingsPage
+
+:themeColorCheck
+set "Configtxtfile=C:\Program Files\ROTWEOptimizer\TextsColor.cfg"
+
+
+for /F "delims=" %%i in ('type "%Configtxtfile%"') do (
+    if "%%i"=="1" (
+        color 1 & goto themeColorMenu
+    ) else if "%%i"=="2" (
+        color 2 & goto themeColorMenu
+    ) else if "%%i"=="3" (
+        color 3 & goto themeColorMenu
+    ) else if "%%i"=="4" (
+        color 4 & goto themeColorMenu
+    ) else if "%%i"=="5" (
+        color 5 & goto themeColorMenu
+    ) else if "%%i"=="6" (
+        color 6 % goto themeColorMenu
+    ) else if "%%i"=="7" (
+        color 7 % goto themeColorMenu
+    ) else if "%%i"=="8" (
+        color 8 & goto themeColorMenu
+    ) else if "%%i"=="9" (
+        color 9 & goto themeColorMenu
+    ) else if "%%i"=="A" (
+        color a & goto themeColorMenu
+    ) else if "%%i"=="B" (
+        color b & goto themeColorMenu
+    ) else if "%%i"=="C" (
+        color c & goto themeColorMenu
+    )
+)
+
+color & goto themeColorMenu
+
+
+:themeColorMenu
+
+cls
+echo.
+echo Page: Color Theme
+echo.
+echo Here You Can Change This App Texts Color.
+echo.
+echo Colors Available:
+echo.
+echo [ 1 ] Blue         [ 7 ] White
+echo.
+echo [ 2 ] Dark Green   [ 8 ] Gray
+echo.
+echo [ 3 ] Aqua         [ 9 ] Light Blue
+echo.
+echo [ 4 ] Red          [ A ] Light Green
+echo.
+echo [ 5 ] Purple       [ B ] Light Aqya
+echo.
+echo [ 6 ] Yellow       [ C ] Light Red
+echo.
+echo.
+echo.
+set /p c=Enter Your Input: 
+if /I "%C%" EQU "1" goto changeAppColor
+
+
+
+:changeAppColor
+cls
+echo.
+echo Changing Texts Color...
+timeout /t 1 /nobreak>nul
+
+cd "C:\Program Files\ROTWEOptimizer"
+
+    if "%C%"=="1" (
+        echo 1 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="2" (
+        echo 2 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="3" (
+        echo 3 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="4" (
+        echo 4 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="5" (
+        echo 5 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="6" (
+        echo 6 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="7" (
+        echo 7 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="8" (
+        echo 8 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="9" (
+        echo 9 > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="A" (
+        echo A > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="B" (
+        echo B > TextsColor.cfg
+        goto themeColorCheck
+    ) else if "%C%"=="C" (
+        echo C > TextsColor.cfg
+        goto themeColorCheck
+    )
+    echo.
+    echo No Color Choice Entered.
+    timeout /t 1 /nobreak>nul
+    goto themeColorCheck
+
+
+
+
+
 
 
 
