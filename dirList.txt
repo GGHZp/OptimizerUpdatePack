@@ -128,6 +128,10 @@ content\fonts\arial.ttf
 content\fonts\arialbd.ttf
 content\fonts\Balthazar-Regular.ttf
 content\fonts\Bangers-Regular.ttf
+content\fonts\BuilderSans-Bold.otf
+content\fonts\BuilderSans-ExtraBold.otf
+content\fonts\BuilderSans-Medium.otf
+content\fonts\BuilderSans-Regular.otf
 content\fonts\ComicNeue-Angular-Bold.ttf
 content\fonts\Creepster-Regular.ttf
 content\fonts\DenkOne-Regular.ttf
@@ -196,6 +200,7 @@ content\fonts\families\AmaticSC.json
 content\fonts\families\Arial.json
 content\fonts\families\Balthazar.json
 content\fonts\families\Bangers.json
+content\fonts\families\BuilderSans.json
 content\fonts\families\ComicNeueAngular.json
 content\fonts\families\Creepster.json
 content\fonts\families\DenkOne.json
@@ -234,6 +239,7 @@ content\models\AnimationEditor
 content\models\AssetImporter
 content\models\AvatarCompatibilityPreviewer
 content\models\LayeredClothingEditor
+content\models\LivePackages
 content\models\MaterialManager
 content\models\RigBuilder
 content\models\Thumbnails
@@ -249,6 +255,7 @@ content\models\LayeredClothingEditor\mannequin.rbxm
 content\models\LayeredClothingEditor\mannequin_mock.rbxm
 content\models\LayeredClothingEditor\MeshPartHeadTemplate.rbxm
 content\models\LayeredClothingEditor\PartHeadTemplate.rbxm
+content\models\LivePackages\.placeholder
 content\models\MaterialManager\material_model.rbxm
 content\models\MaterialManager\smooth_material_model.rbxm
 content\models\MaterialManager\smooth_sphere.mesh
@@ -1116,11 +1123,14 @@ content\textures\StudioSharedUI\filter.png
 content\textures\StudioSharedUI\folder.png
 content\textures\StudioSharedUI\grid.png
 content\textures\StudioSharedUI\grid@2x.png
+content\textures\StudioSharedUI\Help.png
 content\textures\StudioSharedUI\images.png
 content\textures\StudioSharedUI\import.png
 content\textures\StudioSharedUI\import@2x.png
+content\textures\StudioSharedUI\KebabMenu.png
 content\textures\StudioSharedUI\list.png
 content\textures\StudioSharedUI\list@2x.png
+content\textures\StudioSharedUI\MeatballMenu.png
 content\textures\StudioSharedUI\menu.png
 content\textures\StudioSharedUI\meshes.png
 content\textures\StudioSharedUI\models.png
@@ -1155,6 +1165,7 @@ content\textures\StudioSharedUI\spawn_withoutbg_32.png
 content\textures\StudioSharedUI\statusSuccess.png
 content\textures\StudioSharedUI\statusWarning.png
 content\textures\StudioSharedUI\TransparentWhiteImagePlaceholder.png
+content\textures\StudioSharedUI\Undo.png
 content\textures\StudioSharedUI\videos.png
 content\textures\StudioToolbox\alert-icon-small.png
 content\textures\StudioToolbox\Animation.png
