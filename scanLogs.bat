@@ -1,6 +1,6 @@
 @echo off
 :: Function
-set "green=[92m"
-set "red=[91m"
-set "txtend=[0m"
+set "ggreen=[92m"
+set "rred=[91m"
+set "ttxtend=[0m"
 
