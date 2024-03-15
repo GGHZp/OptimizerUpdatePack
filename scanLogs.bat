@@ -6,3 +6,7 @@ set "n=&"
 set "rarrow=>"
 set "ttxtend=[0m"
 
+cd "%localappdata%\temp\ROTWETemp"
+echo ms = WScript.Arguments(0) > sleep.vbs
+echo WScript.Sleep ms >> sleep.vbs
+
